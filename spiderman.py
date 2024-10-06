@@ -1,31 +1,36 @@
 #THIS IS NOT DYNAMIC PROGRAMMING, but hopefully its a start (maybe can add some kind of dictionary to keep track of different max heights? idk lol)
 
-def workout(distance, intList, path, numsMoves):
-    if (len(path) == numsMoves): # base case: if the length of the path is equal to the number of moves
-        if (distance == 0): # only valid if the length is 0
-            return path
+def spiderman(climbList):
+    solutions = []
+    stack = [(0, 0, "")]  # (currentHeight, maxHeight, path)
+    
+    while len(stack) != 0:
+        currentHeight, maxHeight, moves = stack.pop()
+        
+        if len(moves) == len(climbList):
+            if currentHeight == 0:
+                solutions.append((moves, maxHeight)) #once it reaches the length of the climb list it
         else:
-            return "IMPOSSIBLE"
-    if (distance < 0):
+            upHeight = currentHeight + climbList[len(moves)]
+            upMaxHeight = max(upHeight, maxHeight)
+            stack.append((upHeight, upMaxHeight, moves + "U"))
+
+            downHeight = currentHeight - climbList[len(moves)]
+            if downHeight >= 0:
+                stack.append((downHeight, maxHeight, moves + "D"))
+    if len(solutions) == 0: # figures out if there are no valid solutions
         return "IMPOSSIBLE"
-    else:
-        result = workout(distance + intList[len(path)], intList, path + "U", numsMoves)
-        if (result != "IMPOSSIBLE"):
-            return result   
-        if (distance - intList[len(path)] >= 0): # checks if distance would go below 0
-            result = workout(distance - intList[len(path)], intList, path + "D", numsMoves)
-            if (result != "IMPOSSIBLE"):
-                return result
+    bestSol = ''
+    bestNum = float('inf')
+    for curSol, curNum in solutions: #finds best solution
+        if curNum < bestNum:
+            bestSol = curSol
+            bestNum = curNum
 
-    return "IMPOSSIBLE"
-
+    return bestSol
 tests = int(input())
-
-for i in range (0,tests):
-    numberMoves = int(input())
+for i in range (0, tests):
+    num = int(input())
     moves = input()
     movesList = [int(x) for x in moves.split()]
-
-
-    result = workout(0, movesList, "",numberMoves )
-    print(result)
+    print(spiderman(movesList))
