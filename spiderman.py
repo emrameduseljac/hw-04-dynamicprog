@@ -1,3 +1,10 @@
+def printTable(table):
+    for j in range (len(table)):     #this was for testing
+        print("Row ", j+1)
+        for i in range (len(table[j])):       
+            if table[j][i] != False:
+                print(i) 
+
 def spiderman(climbList, size):
     max = sum(climbList)
     table = [[False] * (max + 1) for i in range(size + 1)]
@@ -11,17 +18,10 @@ def spiderman(climbList, size):
                     table[i][j + dDistance] = True #fills out table of valid places
                 if j - dDistance >= 0:
                     table[i][j - dDistance] = True #fills out table of valid places
+    printTable(table)
     if table[size][0] != True: #if touching the ground isnt possible it returns impossible
         return "IMPOSSIBLE"
     else:
-        return "path"
-    #for j in range (len(table)):     #this was for testing
-    #    print("Row ", j+1)
-    #    for i in range (len(table[j])):
-    #        
-    #        if table[j][i] == True:
-    #            print(i)
+        return "path" #maybe use some kind of backtracking to minimize height?
 
 print(spiderman([20,20,20,20], 4))
-
-
