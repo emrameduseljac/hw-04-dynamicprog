@@ -1,3 +1,5 @@
+#THIS IS NOT DYNAMIC PROGRAMMING, but hopefully its a start (maybe can add some kind of dictionary to keep track of different max heights? idk lol)
+
 def workout(distance, intList, path, numsMoves):
     if (len(path) == numsMoves): # base case: if the length of the path is equal to the number of moves
         if (distance == 0): # only valid if the length is 0
