@@ -1,34 +1,32 @@
 def trainsorting(numOfCars, weightOfCars):
-    # initialize increasing and decreasing lists of subsequence lengths
-    increasing = []
-    decreasing = []
-    # set min. subsequence lengths to 1
-    for i in range(numOfCars):
-        increasing.append(1)
-        decreasing.append(1)
-    # check if current car heavier than previous car(s)
-    for curr_car in range(numOfCars):
-        for prev_car in range(i):
-            if weightOfCars[curr_car] > weightOfCars[prev_car]:
-                # if weight of current car is heavier than weight of a previous car, add 1 to length of current car
-                increasing[curr_car] = max(increasing[curr_car], increasing[prev_car]+1)      
-    # start from last car to compare with future car(s)
-    for curr_car in reversed(range(numOfCars)):
-        for future_car in range(curr_car + 1, numOfCars):
-            if weightOfCars[curr_car] > weightOfCars[future_car]:
-                # if weight of current car greater than weight of future car, add 1 to length of current car
-                decreasing[curr_car] = max(decreasing[curr_car], decreasing[future_car]+1)
+    # Decreasing and increasing lists to store lengths of subsequences
+    decreasing = [1] * numOfCars
+    increasing = [1] * numOfCars
 
-    # outputs number of cars in the longest train that can be made given the restrictions
+    # Calculate decreasing subsequence length from each position
+    for i in range(numOfCars - 2, -1, -1):
+        for j in range(i + 1, numOfCars):
+            if weightOfCars[i] > weightOfCars[j]:
+                decreasing[i] = max(decreasing[i], 1 + decreasing[j])
+
+    # Calculate increasing subsequence length from each position
+    for i in range(numOfCars - 2, -1, -1):
+        for j in range(i + 1, numOfCars):
+            if weightOfCars[i] < weightOfCars[j]:
+                increasing[i] = max(increasing[i], 1 + increasing[j])
+
+    # Calculate the maximum length of the train
     max_length = 0
     for i in range(numOfCars):
-        max_length = max(max_length, increasing[i] + decreasing[i] - 1)
+        max_length = max(max_length, decreasing[i] + increasing[i] - 1)
+
     return max_length
-    
-# input
+
+# Input
 numOfCars = int(input())
 weightOfCars = []
 for i in range(numOfCars):
     weight = int(input())
     weightOfCars.append(weight)
+
 print(trainsorting(numOfCars, weightOfCars))
